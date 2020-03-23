@@ -2,11 +2,11 @@
   <div class="navbar">
     <nav class="nav-extended indigo darken-2">
       <div class="nav-content">
-        <router-link to>
+        <router-link to="/">
           <span class="nav-title">Ninja Smoothies</span>
         </router-link>
         <a href class="btn-floating btn-large halfway-fab">
-          <router-link to>
+          <router-link to="/add-smoothie">
             <i class="material-icons">add</i>
           </router-link>
         </a>
@@ -24,4 +24,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.navbar .nav-title {
+  padding: 20px;
+}
+</style>
