@@ -3,7 +3,7 @@
     <div class="card" v-for="smoothie in smoothies" :key="smoothie.id">
       <div class="card-content">
         <i class="material-icons delete" @click="deleteSmoothie(smoothie.id)">delete</i>
-        <h2 class="indigo-text">{{ smoothie.name }}</h2>
+        <h2 class="indigo-text">{{ smoothie.title }}</h2>
         <ul class="ingredients">
           <li v-for="(ingredient, index) in smoothie.ingredients" :key="index">
             <span class="chip">{{ ingredient }}</span>
@@ -20,31 +20,20 @@ export default {
   name: "Index",
   data() {
     return {
-      smoothies: [
-        {
-          id: "1",
-          name: "Ninja Brew",
-          slug: "ninja-brew",
-          ingredients: ["bananas", "Peach", "Milk"]
-        },
-        {
-          id: "2",
-          name: "Choco Funk",
-          slug: "ninja-brew",
-          ingredients: ["bananas", "Peach", "Yogourt"]
-        },
-        {
-          id: "3",
-          name: "Ita Delight",
-          slug: "ninja-brew",
-          ingredients: ["bananas", "Peach", "Honey"]
-        }
-      ]
+      smoothies: []
     };
   },
   methods: {
     deleteSmoothie(id) {
-      this.smoothies = this.smoothies.filter(smoothie => smoothie.id !== id);
+      //delete smoothie from firestore
+      db.collection("smoothies")
+        .doc(id)
+        .delete()
+        .then(() => {
+          this.smoothies = this.smoothies.filter(
+            smoothie => smoothie.id !== id
+          );
+        });
     }
   },
   created() {
@@ -53,7 +42,9 @@ export default {
       .get()
       .then(snapshot => {
         snapshot.forEach(doc => {
-          console.log("doc", doc);
+          let smoothie = doc.data();
+          smoothie.id = doc.id;
+          this.smoothies.push(smoothie);
         });
       });
   }
